@@ -2,9 +2,9 @@ DROP DATABASE if EXISTS `javer_bank_db`;
 CREATE DATABASE `javer_bank_db`;
 USE `javer_bank_db`;
 
-DROP TABLE IF EXISTS `customer`;
+DROP TABLE IF EXISTS `customers`;
 
-CREATE TABLE `customer` (
+CREATE TABLE `customers` (
   `id` BINARY(16) NOT NULL PRIMARY KEY,
   `name` varchar(255),
   `phone` BIGINT,
@@ -16,4 +16,4 @@ CREATE TABLE `customer` (
   `created_at` TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=UTF8;
 
-SELECT * FROM javer_bank_db.customer;
+SELECT * FROM javer_bank_db.customers;
