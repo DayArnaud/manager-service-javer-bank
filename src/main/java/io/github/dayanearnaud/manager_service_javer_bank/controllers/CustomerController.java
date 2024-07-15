@@ -1,5 +1,6 @@
 package io.github.dayanearnaud.manager_service_javer_bank.controllers;
 
+import io.github.dayanearnaud.manager_service_javer_bank.exceptions.UserNotFoundException;
 import io.github.dayanearnaud.manager_service_javer_bank.model.CustomerEntity;
 import io.github.dayanearnaud.manager_service_javer_bank.useCases.*;
 import jakarta.validation.Valid;
@@ -28,6 +29,9 @@ public class CustomerController {
 
     @Autowired
     private DeleteCustomerUseCase deleteCustomerUseCase;
+
+    @Autowired
+    private CalculateScoreUseCase calculateScoreUseCase;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CustomerEntity customerEntity) {
@@ -72,6 +76,17 @@ public class CustomerController {
             UUID uuid = UUID.fromString(id);
             this.deleteCustomerUseCase.execute(uuid);
             return ResponseEntity.ok().body("Customer deleted successfully");
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @GetMapping("/calculate-score/{id}")
+    public ResponseEntity<Object> calculateScore(@PathVariable String id) {
+        try{
+            UUID uuid = UUID.fromString(id);
+            var result = this.calculateScoreUseCase.execute(uuid);
+            return ResponseEntity.ok().body(result);
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
