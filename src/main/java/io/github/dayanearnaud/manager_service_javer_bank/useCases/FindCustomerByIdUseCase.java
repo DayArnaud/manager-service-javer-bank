@@ -15,6 +15,6 @@ public class FindCustomerByIdUseCase {
     private CustomerRepository customerRepository;
 
     public CustomerEntity execute(UUID id) {
-        return this.customerRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        return this.customerRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
     }
 }

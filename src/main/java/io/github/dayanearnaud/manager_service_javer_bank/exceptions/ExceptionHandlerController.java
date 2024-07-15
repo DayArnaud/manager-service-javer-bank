@@ -7,14 +7,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
 
-    private MessageSource messageSource;
+    private final MessageSource messageSource;
 
     public ExceptionHandlerController(MessageSource message) {
         this.messageSource = message;
@@ -32,5 +34,18 @@ public class ExceptionHandlerController {
         });
 
         return new ResponseEntity<>(dto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
+        return ResponseEntity.badRequest().body("Invalid UUID format.");
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<String> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException e) {
+        if(e.getRequiredType() == UUID.class) {
+            return ResponseEntity.badRequest().body("Invalid UUID format.");
+        }
+        return  ResponseEntity.badRequest().body(e.getMessage());
     }
 }
