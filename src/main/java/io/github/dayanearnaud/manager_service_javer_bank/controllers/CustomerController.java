@@ -4,6 +4,7 @@ import io.github.dayanearnaud.manager_service_javer_bank.exceptions.UserNotFound
 import io.github.dayanearnaud.manager_service_javer_bank.model.CustomerEntity;
 import io.github.dayanearnaud.manager_service_javer_bank.useCases.CreateCustomerUseCase;
 import io.github.dayanearnaud.manager_service_javer_bank.useCases.FindCustomerByIdUseCase;
+import io.github.dayanearnaud.manager_service_javer_bank.useCases.GetAllCustomersUseCase;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,6 +22,9 @@ public class CustomerController {
 
     @Autowired
     private FindCustomerByIdUseCase findCustomerByIdUseCase;
+
+    @Autowired
+    private GetAllCustomersUseCase getAllCustomersUseCase;
 
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CustomerEntity customerEntity) {
@@ -43,5 +47,11 @@ public class CustomerController {
         } catch(UserNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<?> findAll() {
+        var result = this.getAllCustomersUseCase.execute();
+        return ResponseEntity.ok(result);
     }
 }
