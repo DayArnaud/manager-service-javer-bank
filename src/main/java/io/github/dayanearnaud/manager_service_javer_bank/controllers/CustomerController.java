@@ -1,11 +1,9 @@
 package io.github.dayanearnaud.manager_service_javer_bank.controllers;
 
-import io.github.dayanearnaud.manager_service_javer_bank.exceptions.UserNotFoundException;
 import io.github.dayanearnaud.manager_service_javer_bank.model.CustomerEntity;
 import io.github.dayanearnaud.manager_service_javer_bank.useCases.*;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

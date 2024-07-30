@@ -2,6 +2,8 @@ package io.github.dayanearnaud.manager_service_javer_bank.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 
@@ -24,8 +26,14 @@ public class CustomerEntity {
     private String email;
     private Long phone;
     private Boolean account_holder;
+
+    @Column(name = "account_number", unique = true)
     private String account_number;
+
+    @NotNull(message = "Balance must not be null.")
+    @Min(value = 0, message = "Balance must be greater than or equal to zero.")
     private Double balance;
+
     private Double credit_score;
 
     @CreationTimestamp
