@@ -12,9 +12,13 @@ import java.util.List;
 public class GetAllCustomersUseCase {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+
+    public GetAllCustomersUseCase(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     public List<CustomerEntity> execute() {
-        return this.customerRepository.findAll();
+        return customerRepository.findAll();
     }
 }

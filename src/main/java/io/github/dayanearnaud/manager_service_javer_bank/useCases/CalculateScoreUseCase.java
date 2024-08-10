@@ -12,15 +12,19 @@ import java.util.UUID;
 public class CalculateScoreUseCase {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+
+    public CalculateScoreUseCase(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     public double execute(UUID id) {
         CustomerEntity customer = customerRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
 
-        double score = customer.getBalance() * 0.1;
-        customer.setCredit_score(score);
+        double roundedScore = Math.round(customer.getBalance() * 0.1 * 100.0) / 100.0;
+        customer.setCredit_score(roundedScore);
         customerRepository.save(customer);
 
-        return score;
+        return roundedScore;
     }
 }

@@ -1,7 +1,9 @@
 package io.github.dayanearnaud.manager_service_javer_bank.exceptions;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -12,6 +14,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class ExceptionHandlerController {
@@ -38,7 +41,7 @@ public class ExceptionHandlerController {
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException e) {
-        return ResponseEntity.badRequest().body("Invalid UUID format.");
+        return ResponseEntity.badRequest().body(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
@@ -47,5 +50,16 @@ public class ExceptionHandlerController {
             return ResponseEntity.badRequest().body("Invalid UUID format.");
         }
         return  ResponseEntity.badRequest().body(e.getMessage());
+    }
+
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<String> handleDataIntegrityViolationException(DataIntegrityViolationException e) {
+        return ResponseEntity.badRequest().body(e.getMostSpecificCause().getMessage());
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<String> handleConstraintViolationException(ConstraintViolationException e) {
+        String errorMessage = e.getConstraintViolations().stream().map(violation -> violation.getMessage()).collect(Collectors.joining(", "));
+        return ResponseEntity.badRequest().body(errorMessage);
     }
 }

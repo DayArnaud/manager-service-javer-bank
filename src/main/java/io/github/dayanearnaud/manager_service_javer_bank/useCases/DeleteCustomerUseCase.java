@@ -11,10 +11,14 @@ import java.util.UUID;
 public class DeleteCustomerUseCase {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+
+    public DeleteCustomerUseCase(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     public void execute(UUID id) {
-        this.customerRepository.findById(id).ifPresentOrElse(
+        customerRepository.findById(id).ifPresentOrElse(
                 customer -> customerRepository.deleteById(id), () -> {
                     throw new UserNotFoundException();
                 }

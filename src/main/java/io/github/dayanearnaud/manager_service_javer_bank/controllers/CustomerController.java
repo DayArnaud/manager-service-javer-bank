@@ -31,10 +31,19 @@ public class CustomerController {
     @Autowired
     private CalculateScoreUseCase calculateScoreUseCase;
 
+    public CustomerController(CreateCustomerUseCase createCustomerUseCase, FindCustomerByIdUseCase findCustomerByIdUseCase, GetAllCustomersUseCase getAllCustomersUseCase, UpdateCustomerUseCase updateCustomerUseCase, DeleteCustomerUseCase deleteCustomerUseCase, CalculateScoreUseCase calculateScoreUseCase) {
+        this.createCustomerUseCase = createCustomerUseCase;
+        this.findCustomerByIdUseCase = findCustomerByIdUseCase;
+        this.getAllCustomersUseCase = getAllCustomersUseCase;
+        this.updateCustomerUseCase = updateCustomerUseCase;
+        this.deleteCustomerUseCase = deleteCustomerUseCase;
+        this.calculateScoreUseCase = calculateScoreUseCase;
+    }
+
     @PostMapping("/")
     public ResponseEntity<Object> create(@Valid @RequestBody CustomerEntity customerEntity) {
         try {
-            var result = this.createCustomerUseCase.execute(customerEntity);
+            var result = createCustomerUseCase.execute(customerEntity);
             return ResponseEntity.ok().body(result);
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -45,7 +54,7 @@ public class CustomerController {
     public ResponseEntity<Object> findById(@PathVariable String id) {
         try {
             UUID uuid = UUID.fromString(id);
-            var result = this.findCustomerByIdUseCase.execute(uuid);
+            var result = findCustomerByIdUseCase.execute(uuid);
             return ResponseEntity.ok().body(result);
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -54,14 +63,14 @@ public class CustomerController {
 
     @GetMapping("/")
     public ResponseEntity<Object> findAll() {
-        var result = this.getAllCustomersUseCase.execute();
+        var result = getAllCustomersUseCase.execute();
         return ResponseEntity.ok().body(result);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Object> update(@PathVariable UUID id, @Valid @RequestBody CustomerEntity customerEntity) {
         try{
-            var result = this.updateCustomerUseCase.execute(id, customerEntity);
+            var result = updateCustomerUseCase.execute(id, customerEntity);
             return ResponseEntity.ok().body(result);
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -72,7 +81,7 @@ public class CustomerController {
     public ResponseEntity<String> deleteById(@PathVariable String id) {
         try{
             UUID uuid = UUID.fromString(id);
-            this.deleteCustomerUseCase.execute(uuid);
+            deleteCustomerUseCase.execute(uuid);
             return ResponseEntity.ok().body("Customer deleted successfully");
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
@@ -83,7 +92,7 @@ public class CustomerController {
     public ResponseEntity<Object> calculateScore(@PathVariable String id) {
         try{
             UUID uuid = UUID.fromString(id);
-            var result = this.calculateScoreUseCase.execute(uuid);
+            var result = calculateScoreUseCase.execute(uuid);
             return ResponseEntity.ok().body(result);
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());

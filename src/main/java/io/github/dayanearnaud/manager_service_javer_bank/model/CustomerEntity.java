@@ -31,7 +31,7 @@ public class CustomerEntity {
     private String account_number;
 
     @NotNull(message = "Balance must not be null.")
-    @Min(value = 0, message = "Balance must be greater than or equal to zero.")
+    @Min(value = 0)
     private Double balance;
 
     private Double credit_score;

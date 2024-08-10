@@ -12,9 +12,13 @@ import java.util.UUID;
 public class FindCustomerByIdUseCase {
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
+
+    public FindCustomerByIdUseCase(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
 
     public CustomerEntity execute(UUID id) {
-        return this.customerRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
+        return customerRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
     }
 }
