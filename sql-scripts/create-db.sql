@@ -10,7 +10,7 @@ CREATE TABLE `customers` (
   `phone` BIGINT,
   `email` varchar(255),
   `account_holder` BOOLEAN,
-  `account_number` varchar(255),
+  `account_number` varchar(255) UNIQUE,
   `balance` DOUBLE,
   `credit_score` DOUBLE,
   `created_at` TIMESTAMP
